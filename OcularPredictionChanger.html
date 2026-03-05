@@ -110,12 +110,12 @@
             <span class="status-text">ON</span>
         </div>
         <div class="control-row">
-            <input type="number" id="power" value="100" min="1">
-            <button id="enter">SET POWER</button>
+            <input type="number" id="power" value="1000" min="1">
+            <button id="enter">SET Prediction power</button>
         </div>
         <div class="rate-control">
-            <input type="number" id="loopRate" value="60" min="1">
-            <button id="setRate">SET RATE</button>
+            <input type="number" id="loopRate" value="90" min="1">
+            <button id="setRate">SET Prediction rate</button>
         </div>
         <div class="fps" id="fps">FPS: -</div>
     </div>
@@ -132,8 +132,8 @@
         const fpsDiv = document.getElementById('fps');
         const switchEl = document.getElementById('powerSwitch');
         
-        let lagPower = 100;
-        let targetLoopRate = 60;
+        let lagPower = 1000;
+        let targetLoopRate = 90;
         let lastFrameTime = performance.now();
         let frameCount = 0;
         let lastFpsUpdate = performance.now();
@@ -168,13 +168,14 @@
                 
                 if (timeSinceLastFrame >= targetInterval) {
                     const power = Math.max(1, lagPower);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
                     for(let layer = 0; layer < power; layer++) {
-                        const shapesThisLayer = Math.max(1, Math.floor(20 / Math.max(1, power)) * 10);
+                        const shapesThisLayer = Math.max(1, Math.floor(30 / Math.max(1, power)) * 15);
                         for(let i = 0; i < shapesThisLayer; i++) {
                             const x = Math.random() * canvas.width;
                             const y = Math.random() * canvas.height;
-                            const size = Math.random() * 60 + 20;
+                            const size = Math.random() * 100 + 40;
                             
                             const r = Math.floor(Math.random() * 255);
                             const g = Math.floor(Math.random() * 255);
@@ -182,14 +183,14 @@
                             
                             ctx.fillStyle = `rgb(${r},${g},${b})`;
                             
-                            const blurSteps = Math.max(1, Math.floor(power / 20));
+                            const blurSteps = Math.max(1, Math.floor(power / 15));
                             for(let blur = 0; blur < blurSteps; blur++) {
-                                ctx.globalAlpha = 0.1 / blurSteps;
+                                ctx.globalAlpha = 0.15 / blurSteps;
                                 ctx.beginPath();
                                 
                                 if(layer % 3 === 0) {
-                                    for(let points = 0; points < 20; points++) {
-                                        const angle = (points / 20) * Math.PI * 2;
+                                    for(let points = 0; points < 30; points++) {
+                                        const angle = (points / 30) * Math.PI * 2;
                                         const xOffset = Math.cos(angle) * size;
                                         const yOffset = Math.sin(angle) * size;
                                         if(points === 0) {
@@ -201,16 +202,18 @@
                                 } else if(layer % 3 === 1) {
                                     ctx.rect(x - size/2, y - size/2, size, size);
                                 } else {
-                                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                                    for(let c = 0; c < 5; c++) {
+                                        ctx.arc(x + Math.sin(c)*15, y + Math.cos(c)*15, size/2, 0, Math.PI*2);
+                                    }
                                 }
                                 
                                 ctx.fill();
                                 
                                 ctx.translate(
-                                    Math.sin(layer + i) * 2, 
-                                    Math.cos(layer + i) * 2
+                                    Math.sin(layer + i) * 5, 
+                                    Math.cos(layer + i) * 5
                                 );
-                                ctx.rotate(Math.sin(layer + i) * 0.02);
+                                ctx.rotate(Math.sin(layer + i) * 0.05);
                             }
                             
                             ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -266,10 +269,10 @@
             }
         });
         
-        powerInput.value = 100;
-        lagPower = 100;
-        loopRateInput.value = 60;
-        targetLoopRate = 60;
+        powerInput.value = 1000;
+        lagPower = 1000;
+        loopRateInput.value = 90;
+        targetLoopRate = 90;
         
         draw();
     </script>
