@@ -5,3 +5,16 @@ To keep it working in-game you have to turn on "Multi-tasking" inside of Advance
 # How It Works
  generates lots layered graphics depending on the rate and the power, it creates thousands of geometric shapes with transparency effects and rotations.
 
+# How do i use it?
+Prediction Power: Controls the number of layers drawn per frame (unlimited values)
+
+Prediction Rate: Sets the target frames per second (1-1000+)
+
+Real-time FPS Display: Shows actual performance impact
+
+On/Off Toggle: Start and stop the stress test instantly
+
+
+# Understanding
+// This single line runs 'power' times per frame, creating massive GPU load
+for(let layer = 0; layer < power; layer++) { /* draw complex shapes */ }
